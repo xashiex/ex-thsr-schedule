@@ -23,7 +23,7 @@ module.exports = {
       },
       {
         type: 'add',
-        path: `${BASE_PATH}${data.path}/${data.name}.jsx`,
+        path: `${BASE_PATH}${data.path}/${data.name}.js`,
         templateFile: 'component/class.hbs',
         abortOnFail: true
       }
