@@ -1,7 +1,7 @@
 const styles = theme => ({
   tableCell: {
     padding: theme.spacing.unit,
-    textAlign: 'center'
+    textAlign: 'left'
   }
 });
 

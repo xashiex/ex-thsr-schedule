@@ -1,6 +1,6 @@
 import {
   TOGGLE_NAV
-} from '../actions';
+} from '../actions/navigation';
 
 const defaultState = {
   isOpen: false

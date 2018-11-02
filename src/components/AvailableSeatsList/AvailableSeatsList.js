@@ -5,6 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import ResultTable from '../ResultTable';
 import styles from './styles';
 
+import { columns, head, body } from '../ResultTable/testData';
+
 class AvailableSeatsList extends Component {
 
   render() {
@@ -15,7 +17,13 @@ class AvailableSeatsList extends Component {
         <Typography variant="subtitle1" color="inherit">
           今天從 台北 到 高雄 尚有座位列車查詢結果：
         </Typography>
-        <ResultTable />
+        <ResultTable 
+          columns={columns} 
+          head={head}
+          body={body}
+          initSortBy="originTime"
+          initAscending={true}
+        />
       </div>
     );
   }
