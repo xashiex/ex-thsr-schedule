@@ -20,7 +20,7 @@ class Header extends Component {
             <IconButton
               color="inherit"
               aria-label="Open drawer"
-              onClick={() => toggleNav()}
+              onClick={toggleNav}
               className={classes.menuButton}
             >
                 <MenuIcon />

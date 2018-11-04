@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import HeaderContainer from '../HeaderContainer';
 import NavigationContainer from '../NavigationContainer';
 import MainContent from '../MainContent';
+import StationsErrorModalContainer from '../../containers/StationsErrorModalContainer';
 import styles from './styles';
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
           <HeaderContainer />
           <NavigationContainer />
           <MainContent />
+          <StationsErrorModalContainer />
         </div>
       </Router>
     );
