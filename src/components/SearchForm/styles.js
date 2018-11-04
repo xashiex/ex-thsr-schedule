@@ -6,8 +6,8 @@ const styles = theme => ({
   },
   formControl: {
     margin: theme.spacing.unit,
-    width: 120
-  }
+    width: 140
+  },
 });
 
 export default styles;
