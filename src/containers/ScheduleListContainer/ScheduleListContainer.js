@@ -3,7 +3,6 @@ import ScheduleList from '../../components/ScheduleList';
 
 const mapStateToProps = (state) => ({
   stations: state.stations,
-  price: state.price,
   schedule: state.schedule
 });
 

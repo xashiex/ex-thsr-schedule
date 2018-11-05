@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { fetchPrice } from './price';
 
 export const FETCH_SCHEDULE_REQUEST = 'FETCH_SCHEDULE_REQUEST';
 export const FETCH_SCHEDULE_FAILURE = 'FETCH_SCHEDULE_FAILURE';
@@ -24,18 +23,26 @@ export const fetchSchedule = ({trainDate, originStationID, destinationStationID}
   return (dispatch) => {
     dispatch(fetchRequest({trainDate, originStationID, destinationStationID}));
     
-    return axios({
-      method: 'get',
-      url: `https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTimetable/OD/${originStationID}/to/${destinationStationID}/${trainDate}?$format=JSON`
-    })
+    const data = {
+      schedule: null,
+      price: null
+    };
+
+    return axios.get(`https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTimetable/OD/${originStationID}/to/${destinationStationID}/${trainDate}?$format=JSON`)
       .then(
         response => {
-          dispatch(fetchSuccess(response.data));
-          dispatch(fetchPrice({originStationID, destinationStationID}));
-        },
-        error => {
-          dispatch(fetchFailure());
+          data.schedule = response.data;
+          return axios.get(`https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/ODFare/${originStationID}/to/${destinationStationID}?$format=JSON`);
         }
       )
+      .then(
+        response => {
+          data.price = response.data;
+          dispatch(fetchSuccess(data));
+        }
+      )
+      .catch(() => {
+        dispatch(fetchFailure());
+      })
   }
 }

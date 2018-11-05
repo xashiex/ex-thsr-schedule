@@ -22,10 +22,10 @@ const getTableBody = (scheduleData, priceData) => scheduleData.map(schedule => {
 class ScheduleList extends Component {
 
   render() {
-    const { classes, stations, schedule, price } = this.props;
+    const { classes, stations, schedule } = this.props;
 
     const info = schedule.params ? getScheduleInfo(stations, schedule.params) : null;
-    const tableBody = (schedule.data && price.data) ? getTableBody(schedule.data, price.data) : null;
+    const tableBody = schedule.data ? getTableBody(schedule.data.schedule, schedule.data.price) : null;
 
     return (
       <div className={classes.root}>
@@ -52,7 +52,6 @@ ScheduleList.propTypes = {
   classes: PropTypes.object.isRequired,
   stations: PropTypes.object,
   schedule: PropTypes.object,
-  price: PropTypes.object,
 }
 
 export default withStyles(styles)(ScheduleList);
