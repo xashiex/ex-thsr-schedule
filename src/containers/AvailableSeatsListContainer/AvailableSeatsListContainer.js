@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
-import ScheduleList from '../../components/ScheduleList';
+import AvailableSeatsList from '../../components/AvailableSeatsList';
 
 const mapStateToProps = (state) => ({
   stations: state.stations,
-  price: state.price,
-  schedule: state.schedule
+  availableSeats: state.availableSeats
 });
 
 export default connect(
   mapStateToProps
-)(ScheduleList);
+)(AvailableSeatsList);

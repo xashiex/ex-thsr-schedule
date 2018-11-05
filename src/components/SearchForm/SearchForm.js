@@ -39,19 +39,6 @@ const getStationOptions = (stations, defaultValue) =>
     </option>
   )));
 
-const getDirection = (stations, orgiginStationID, destinationStationID) => {
-  let orgIndex = 0;
-  let desIndex = 0;
-  stations.forEach((station, index) => {
-    if (station.StationID === orgiginStationID) {
-      orgIndex = index;
-    } else if (station.StationID === destinationStationID) {
-      desIndex = index;
-    }
-  });
-  return desIndex > orgIndex ? '0' : '1'; // '0: 南下', '1: 北上
-}
-
 class SearchForm extends Component {
   state = {
     [FIELD_NAMES.TRAIN_DATE]: '',
@@ -109,14 +96,6 @@ class SearchForm extends Component {
     this.setState({errMsgs});
 
     if (errMsgs.length > 0) return;
-
-    this.setState({
-      direction: getDirection(
-        this.props.stations.list, 
-        this.state[FIELD_NAMES.ORIGIN_STATION_ID], 
-        this.state[FIELD_NAMES.DESTINATION_STATION_ID]
-      )
-    });
 
     const { submit } = this.props;
     if (typeof submit === 'function') submit(this.state);
