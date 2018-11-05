@@ -26,13 +26,14 @@ const FIELD_NAMES = {
   DESTINATION_STATION_ID: 'destinationStationID',
 }
 
-const getStationOptions = stations => 
+const getStationOptions = (stations, defaultValue) => 
   [
     <option key="-1" value=""></option>
   ].concat(stations.list.map(station => (
     <option
       key={station.StationID}
       value={station.StationID}
+      selected={station.StationID === defaultValue}
     >
       {station.StationName.Zh_tw}
     </option>
@@ -64,6 +65,10 @@ class SearchForm extends Component {
 
   maxDayjs = dayjs().add(27, 'day').endOf('day');
 
+  setDefaultState = (field, value) => {
+    if (this.state[field] === '' && value) this.setState({[field]: value});
+  }
+
   handleChange = name => e => {
     this.setState({ [name]: e.target.value});
   }
@@ -78,7 +83,7 @@ class SearchForm extends Component {
     const errMsgs = [];
 
     if (this.props.type === FORM_TYPES.SCHEDULE && this.state[FIELD_NAMES.TRAIN_DATE] === '') {
-      errMsgs.push('請選擇乘車日期')
+      errMsgs.push('請選擇乘車日期');
     } else {
       const trainDayjs = dayjs(this.state[FIELD_NAMES.TRAIN_DATE]);
       if (trainDayjs.isBefore(this.minDayjs) || trainDayjs.isAfter(this.maxDayjs)) {
@@ -114,12 +119,15 @@ class SearchForm extends Component {
     });
 
     const { submit } = this.props;
-    console.log(submit, typeof submit);
     if (typeof submit === 'function') submit(this.state);
   }
 
   render() {
-    const { classes, type, title, stations, isSubmitable } = this.props;
+    const { classes, type, title, stations, trainDate, originStationID, destinationStationID, isSubmitable } = this.props;
+
+    this.setDefaultState(FIELD_NAMES.TRAIN_DATE, trainDate);
+    this.setDefaultState(FIELD_NAMES.ORIGIN_STATION_ID, originStationID);
+    this.setDefaultState(FIELD_NAMES.DESTINATION_STATION_ID, destinationStationID);
     
     this.minDayjs = dayjs().startOf('day');
     this.maxDayjs = dayjs().add(27, 'day').endOf('day');
@@ -140,6 +148,7 @@ class SearchForm extends Component {
                 id="date"
                 label="乘車日期 *"
                 type="date"
+                defaultValue={trainDate}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -157,7 +166,7 @@ class SearchForm extends Component {
               input={<Input name="originStation" id="origin-station" />}
               onChange={this.handleChange(FIELD_NAMES.ORIGIN_STATION_ID)}
             >
-              { getStationOptions(stations) }
+              { getStationOptions(stations, originStationID) }
             </NativeSelect>
           </FormControl>
           <FormControl className={classes.formControl}>
@@ -166,7 +175,7 @@ class SearchForm extends Component {
               input={<Input name="destinationStation" id="destination-station" />}
               onChange={this.handleChange(FIELD_NAMES.DESTINATION_STATION_ID)}
             >
-              { getStationOptions(stations) }
+              { getStationOptions(stations, destinationStationID) }
             </NativeSelect>
           </FormControl>
           <FormControl className={classes.formControl}>
@@ -206,6 +215,10 @@ class SearchForm extends Component {
   }
 }
 
+SearchForm.defaultProps = {
+  trainDate: dayjs().format('YYYY-MM-DD'),
+}
+
 SearchForm.propTypes = {
   classes: PropTypes.object.isRequired,
   type: PropTypes.oneOf([FORM_TYPES.SCHEDULE, FORM_TYPES.AVAILABLE_SEATS]).isRequired,
@@ -214,6 +227,9 @@ SearchForm.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     list: PropTypes.array.isRequired,
   }).isRequired,
+  trainDate: PropTypes.string,
+  originStationID: PropTypes.string,
+  destinationStationID: PropTypes.string,
   isSubmitable: PropTypes.bool.isRequired,
   submit: PropTypes.func,
 }

@@ -6,6 +6,7 @@ import {
 
 const defaultState = {
   isFetching: false,
+  params: null,
   data: null,
   error: null,
 }
@@ -16,8 +17,9 @@ const schedule = (state = defaultState, action) => {
       return {
         ...state,
         isFetching: true,
+        params: action.params,
+        data: null,
         error: null,
-        data: null
       }
     case FETCH_SCHEDULE_SUCCESS:
       return {
