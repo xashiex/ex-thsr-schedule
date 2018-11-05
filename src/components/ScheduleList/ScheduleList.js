@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -29,19 +29,26 @@ class ScheduleList extends Component {
 
     return (
       <div className={classes.root}>
-        {info &&
-          <Typography variant="subtitle1" color="inherit">
-            {info}
-          </Typography>
-        }
-        {tableBody &&
-          <ResultTable
-            columns={columns} 
-            head={head}
-            body={tableBody}
-            initSortBy="originTime"
-            initAscending={true}
-          />
+        { schedule.error
+          ? <Typography variant="subtitle1" color="inherit">
+              {schedule.error}
+            </Typography>
+          : <Fragment>
+              { info &&
+                <Typography variant="subtitle1" color="inherit">
+                  {info}
+                </Typography>
+              }
+              { tableBody &&
+                <ResultTable
+                  columns={columns} 
+                  head={head}
+                  body={tableBody}
+                  initSortBy="originTime"
+                  initAscending={true}
+                />
+              }
+            </Fragment>
         }
       </div>
     );

@@ -51,7 +51,7 @@ export const fetchAvailableSeats = ({originStationID, destinationStationID}) => 
         }
       )
       .catch(() => {
-        dispatch(fetchFailure())
+        dispatch(fetchFailure());
       })
   }
 }

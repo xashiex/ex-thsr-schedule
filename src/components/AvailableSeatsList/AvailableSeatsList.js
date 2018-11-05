@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -87,22 +87,29 @@ class AvailableSeatsList extends Component {
 
     return (
       <div className={classes.root}>
-        {info &&
-          <Typography variant="subtitle1" color="inherit">
-            {info}
-          </Typography>
-        }
-        {tableBody 
-          ? tableBody.length > 0
-            ? <ResultTable 
-                columns={columns} 
-                head={head}
-                body={tableBody}
-                initSortBy="originTime"
-                initAscending={true}
-              />
-            : <Typography variant="subtitle2" color="inherit">無符合資料</Typography>
-          : null
+        { availableSeats.error
+          ? <Typography variant="subtitle1" color="inherit">
+              {availableSeats.error}
+            </Typography>
+          : <Fragment>
+              { info &&
+                <Typography variant="subtitle1" color="inherit">
+                  {info}
+                </Typography>
+              }
+              { tableBody 
+                ? tableBody.length > 0
+                  ? <ResultTable 
+                      columns={columns} 
+                      head={head}
+                      body={tableBody}
+                      initSortBy="originTime"
+                      initAscending={true}
+                    />
+                  : <Typography variant="subtitle2" color="inherit">無符合資料</Typography>
+                : null
+              }
+            </Fragment>
         }
       </div>
     );
