@@ -26,26 +26,28 @@ const FIELD_NAMES = {
   DESTINATION_STATION_ID: 'destinationStationID',
 }
 
-const getStationOptions = (stations, defaultValue) => 
+const getStationOptions = (stations) => 
   [
     <option key="-1" value=""></option>
   ].concat(stations.list.map(station => (
     <option
       key={station.StationID}
       value={station.StationID}
-      selected={station.StationID === defaultValue}
     >
       {station.StationName.Zh_tw}
     </option>
   )));
 
 class SearchForm extends Component {
-  state = {
-    [FIELD_NAMES.TRAIN_DATE]: '',
-    [FIELD_NAMES.ORIGIN_STATION_ID]: '',
-    [FIELD_NAMES.DESTINATION_STATION_ID]: '',
-    direction: '',
-    errMsgs: []
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      [FIELD_NAMES.TRAIN_DATE]: props.trainDate || '',
+      [FIELD_NAMES.ORIGIN_STATION_ID]: props.originStationID || '',
+      [FIELD_NAMES.DESTINATION_STATION_ID]: props.destinationStationID || '',
+      errMsgs: []
+    }
   }
 
   minDayjs = dayjs().startOf('day');
@@ -104,9 +106,9 @@ class SearchForm extends Component {
   render() {
     const { classes, type, title, stations, trainDate, originStationID, destinationStationID, isSubmitable } = this.props;
 
-    this.setDefaultState(FIELD_NAMES.TRAIN_DATE, trainDate);
-    this.setDefaultState(FIELD_NAMES.ORIGIN_STATION_ID, originStationID);
-    this.setDefaultState(FIELD_NAMES.DESTINATION_STATION_ID, destinationStationID);
+    // this.setDefaultState(FIELD_NAMES.TRAIN_DATE, trainDate);
+    // this.setDefaultState(FIELD_NAMES.ORIGIN_STATION_ID, originStationID);
+    // this.setDefaultState(FIELD_NAMES.DESTINATION_STATION_ID, destinationStationID);
     
     this.minDayjs = dayjs().startOf('day');
     this.maxDayjs = dayjs().add(27, 'day').endOf('day');
@@ -142,19 +144,21 @@ class SearchForm extends Component {
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="origin-station">起程站 *</InputLabel>
             <NativeSelect
+              defaultValue={originStationID}
               input={<Input name="originStation" id="origin-station" />}
               onChange={this.handleChange(FIELD_NAMES.ORIGIN_STATION_ID)}
             >
-              { getStationOptions(stations, originStationID) }
+              { getStationOptions(stations) }
             </NativeSelect>
           </FormControl>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="destination-station">到達站 *</InputLabel>
             <NativeSelect
+              defaultValue={destinationStationID}
               input={<Input name="destinationStation" id="destination-station" />}
               onChange={this.handleChange(FIELD_NAMES.DESTINATION_STATION_ID)}
             >
-              { getStationOptions(stations, destinationStationID) }
+              { getStationOptions(stations) }
             </NativeSelect>
           </FormControl>
           <FormControl className={classes.formControl}>
