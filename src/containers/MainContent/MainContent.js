@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import SchedulePage from '../../pages/SchedulePage';
@@ -11,11 +11,15 @@ class MainContent extends Component {
   render() {
     const { classes } = this.props;
 
+    console.log(this.props);
+
     return (
       <main className={ classes.content }>
         <div className={ classes.toolbar } />
-        <Route path="/" exact component={SchedulePage} />
-        <Route path="/available-seats" exact component={AvailableSeatsPage} />
+        <Switch>
+          <Route path="*/available-seats" component={AvailableSeatsPage} />
+          <Route exact component={SchedulePage} />
+        </Switch>
       </main>
     );
   }

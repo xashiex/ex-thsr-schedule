@@ -18,10 +18,10 @@ class Navigation extends Component {
       <Fragment>
         <div className={ classes.toolbar }></div>
           <List>
-            <ListItem button component={ NavLink } to="/">
+            <ListItem button component={ NavLink } to="./">
               <ListItemText primary="列車時刻查詢" />
             </ListItem>
-            <ListItem button component={ NavLink } to="/available-seats">
+            <ListItem button component={ NavLink } to="./available-seats">
               <ListItemText primary="尚有座位列車查詢" />
             </ListItem>
           </List>

@@ -2,6 +2,7 @@
   "name": "2018_11_02_ikala_thsr",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@material-ui/core": "^3.3.2",
     "@material-ui/icons": "^3.0.1",
