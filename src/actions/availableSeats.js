@@ -24,34 +24,22 @@ export const fetchAvailableSeats = ({originStationID, destinationStationID}) => 
   return (dispatch) => {
     dispatch(fetchRequest({originStationID, destinationStationID}));
 
-    const data = {
-      availableSeats: null,
-      price: null,
-      schedule: null,
-    };
-    
-    return axios.get(`https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/AvailableSeatStatusList/${originStationID}?$format=JSON`)
-      .then(
-        response => {
-          data.availableSeats = response.data;
-          return axios.get(`https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/ODFare/${originStationID}/to/${destinationStationID}?$format=JSON`);
-        }
-      )
-      .then(
-        response => {
-          data.price = response.data;
-          const trainDate = dayjs().format('YYYY-MM-DD');
-          return axios.get(`https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTimetable/OD/${originStationID}/to/${destinationStationID}/${trainDate}?$format=JSON`);
-        }
-      )
-      .then(
-        response => {
-          data.schedule = response.data;
-          dispatch(fetchSuccess(data));
-        }
-      )
-      .catch(() => {
-        dispatch(fetchFailure());
-      })
+    const baseURL = 'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR';
+
+    const trainDate = dayjs().format('YYYY-MM-DD');
+
+    return Promise.all([
+      axios.get(`${baseURL}/AvailableSeatStatusList/${originStationID}?$format=JSON`),
+      axios.get(`${baseURL}/ODFare/${originStationID}/to/${destinationStationID}?$format=JSON`),
+      axios.get(`${baseURL}/DailyTimetable/OD/${originStationID}/to/${destinationStationID}/${trainDate}?$format=JSON`)
+    ]).then(values => {
+      dispatch(fetchSuccess({
+        availableSeats: values[0].data,
+        price: values[1].data,
+        schedule: values[2].data,
+      }));
+    }).catch(() => {
+      dispatch(fetchFailure());
+    });
   }
 }

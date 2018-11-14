@@ -22,27 +22,19 @@ const fetchSuccess = (data) => ({
 export const fetchSchedule = ({trainDate, originStationID, destinationStationID}) => {
   return (dispatch) => {
     dispatch(fetchRequest({trainDate, originStationID, destinationStationID}));
-    
-    const data = {
-      schedule: null,
-      price: null
-    };
 
-    return axios.get(`https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/DailyTimetable/OD/${originStationID}/to/${destinationStationID}/${trainDate}?$format=JSON`)
-      .then(
-        response => {
-          data.schedule = response.data;
-          return axios.get(`https://ptx.transportdata.tw/MOTC/v2/Rail/THSR/ODFare/${originStationID}/to/${destinationStationID}?$format=JSON`);
-        }
-      )
-      .then(
-        response => {
-          data.price = response.data;
-          dispatch(fetchSuccess(data));
-        }
-      )
-      .catch(() => {
-        dispatch(fetchFailure());
-      })
+    const baseURL = 'https://ptx.transportdata.tw/MOTC/v2/Rail/THSR';
+
+    return Promise.all([
+      axios.get(`${baseURL}/DailyTimetable/OD/${originStationID}/to/${destinationStationID}/${trainDate}?$format=JSON`),
+      axios.get(`${baseURL}/ODFare/${originStationID}/to/${destinationStationID}?$format=JSON`)
+    ]).then(values => {
+      dispatch(fetchSuccess({
+        schedule: values[0].data,
+        price: values[1].data
+      }));
+    }).catch(() => {
+      dispatch(fetchFailure());
+    });
   }
 }
