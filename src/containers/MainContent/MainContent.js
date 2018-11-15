@@ -11,8 +11,6 @@ class MainContent extends Component {
   render() {
     const { classes } = this.props;
 
-    console.log(this.props);
-
     return (
       <main className={ classes.content }>
         <div className={ classes.toolbar } />

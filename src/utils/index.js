@@ -1,3 +1,9 @@
+import dayjs from 'dayjs';
+
+function getTime(dateStr, timeStr) {
+  return dayjs(`${dateStr}T${timeStr}+08:00`).valueOf();
+}
+
 export const pad = (num, size) => {
   let s = num.toString();
   while(s.length < size) s = '0' + s;
@@ -8,9 +14,9 @@ export const getScheduleItem = (schedule, fares, ticketType) => {
   const trainNo = schedule.DailyTrainInfo.TrainNo;
   const trainDate = schedule.TrainDate;
   const originTimeStr = schedule.OriginStopTime.DepartureTime;
-  const originTime = new Date(`${trainDate} ${originTimeStr}`).getTime();
+  const originTime = getTime(trainDate, originTimeStr);
   const destinationTimeStr = schedule.DestinationStopTime.ArrivalTime;
-  const destinationTime = new Date(`${trainDate} ${destinationTimeStr}`).getTime();
+  const destinationTime = getTime(trainDate, destinationTimeStr);
   const duration = destinationTime - originTime;
   const durationMin = Math.round(duration / 1000 / 60);
   const durationStr = `${pad(Math.floor(durationMin / 60), 2)}:${pad(durationMin % 60, 2)}`;
@@ -20,7 +26,7 @@ export const getScheduleItem = (schedule, fares, ticketType) => {
   return {
     key: trainNo,
     trainNo: {
-      value: trainNo
+      value: trainNo,
     },
     originTime: {
       value: originTime,
